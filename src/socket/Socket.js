@@ -56,42 +56,44 @@ class Socket {
   }
   
   disconnect() {
-    this.console.warn("Disconnecting from socket...");
+    this.console.warning("Disconnecting from socket...");
     
     return this.socket.disconnect();
   }
   
   close() {
-    this.console.warn("Closing socket...");
+    this.console.warning("Closing socket...");
     
     return this.socket.close();
   }
   
-  setup(address) {
-    this.socket = dgram.createSocket({
-      type: "udp4"
-    }, () => {
-      this.socket.on("connect", () => {
-        this.console.log("Socket has successfully connected.");
-      });
+  kill() {
+    this.console.alert("Killing Socket...");
+    this.disconnect();
+    this.close();
+  }
+  
+  setup(address) {    
+    this.socket.on("connect", () => {
+      this.console.log("Socket has successfully connected.");
+    });
       
-      this.socket.on("close", () => {
-        this.console.alert("Socket has successfully disconnected.");
-      });
+    this.socket.on("close", () => {
+      this.console.alert("Socket has successfully disconnected.");
+    });
       
-      this.socket.on("listening", () => {
-        this.console.notice(this.getAddress());
-      });
+    this.socket.on("listening", () => {
+      this.console.notice(this.getAddress());
+     });
       
-      this.socket.on("message", (message, rinfo) => {
-        this.console.info(message)
-        this.console.info(rinfo);
-      });
+    this.socket.on("message", (message, rinfo) => {
+      this.console.info(message)
+      this.console.info(rinfo);
+    });
       
-      this.socket.on("error", (error) => {
-        this.console.error(error);
-        this.close();
-      });
+    this.socket.on("error", (error) => {
+      this.console.error(error);
+      this.close();
     });
     
     if (typeof address !== "undefined" && typeof address.address !== "undefined" && typeof address.port !== "undefined") {
@@ -101,6 +103,10 @@ class Socket {
       
       this.close();
     }
+    
+    this.socket = dgram.createSocket({
+      type: "udp4"
+    });
     
     this.socket.bind(this.bindAddress);
   }
