@@ -1,5 +1,5 @@
 {
-  "name": "sharletpqueryrconclient",
+  "name": "sharletpqueryrcon.js",
   "version": "0.0.0",
   "description": "",
   "main": "index.js",
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/sharletp/SharletPQueryRconClient.git"
+    "url": "git+https://github.com/sharletp/SharletPQueryRcon.js.git"
   },
   "keywords": [
     "nodejs",

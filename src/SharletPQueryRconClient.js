@@ -2,10 +2,10 @@
 
 const Console = require("./console/Console.js");
 
-class SharletPQueryRconClient {
+class SharletPQueryRcon {
   constructor() {
     this.console = new Console();
   }
 };
 
-module.exports = SharletPQueryRconClient;
+module.exports = SharletPQueryRcon;
