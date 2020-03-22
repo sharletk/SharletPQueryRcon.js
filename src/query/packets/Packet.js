@@ -24,6 +24,18 @@ class Packet extends BinaryStream {
     return this.sessionID;
   }
   
+  readString() {
+    return this.readData(this.readUnsignedVarInt()).toString();
+  }
+  
+  writeString(str) {
+    this.writeUnsignedVarInt(Buffer.byteLength(str));
+    
+    if (str.length === 0) return this;
+    this.writeData(Buffer.from(str, "utf8"));
+    return this;
+  }
+  
   encode() {
     this.encodeHeader()
     this.encodePayload();
