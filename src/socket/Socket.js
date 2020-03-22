@@ -110,6 +110,14 @@ class Socket {
     
     this.socket.bind(this.bindAddress);
   }
+  
+  writePacket(address, port, message) {
+    this.socket.send(message.buffer, message.offset, message.buffer.length, port, address, (error) => {
+      if (error) return this.console.error(error);
+      
+      this.console.debug("Successfully send packet through socket.");
+    });
+  }
 };
 
 module.exports = Socket;
