@@ -16,12 +16,7 @@ class HandshakeResponse extends Packet {
   }
   
   decodePayload() {
-    let payload = this.readString().toString().replace("\u0000", "");
-    
-    let buffer = Buffer.alloc(4);
-    buffer.writeUInt32BE(payload, 0);
-    
-    this.payload = buffer;
+    this.payload = this.readString().toString().replace("\u0000", "");
   }
 };
 
