@@ -16,7 +16,7 @@ class HandshakeResponse extends Packet {
   }
   
   decodePayload() {
-    this.payload = this.readString().toString().replace("\u0000", "");
+    this.payload = this.parseString();
   }
 };
 

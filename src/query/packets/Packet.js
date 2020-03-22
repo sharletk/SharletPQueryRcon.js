@@ -28,6 +28,10 @@ class Packet extends BinaryStream {
     return this.readData(this.readUnsignedVarInt()).toString();
   }
   
+  parseString() {
+    return this.readString().toString().replace("\u0000", "");
+  }
+  
   writeString(str) {
     this.writeUnsignedVarInt(Buffer.byteLength(str));
     
