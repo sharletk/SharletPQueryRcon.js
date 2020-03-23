@@ -30,23 +30,31 @@ class Socket {
     return this.getAddress().port;
   }
   
-  getRecvBufferSize() {
+  getRecvSize() {
     return this.socket.getRecvBufferSize();
   }
   
-  getSendBufferSize() {
+  getSendSize() {
     return this.socket.getSendBufferSize();
   }
   
-  setRecvBufferSize(size) {
+  setRecvSize(size) {
     this.socket.setRecvBufferSize(size);
   }
   
-  setSendBufferSize(size) {
+  setSendSize(size) {
     this.socket.setSendBufferSize(size);
   }
   
-  connect() {
+  connect(address) {
+    if (typeof address !== "undefined" && typeof address.address !== "undefined" && typeof address.port !== "undefined") {
+      this.bindAddress = address;
+    } else {
+      this.console.error("Unable to bind to the requested socket due to incomplete data provided.");
+      
+      this.close();
+    }
+        
     this.console.notice(`Connecting to socket with Address: ${this.bindAddress.address} | Port: ${this.bindAddress.port}..
     `);
     
@@ -73,7 +81,11 @@ class Socket {
     this.close();
   }
   
-  setup(address) {    
+  setup(port) {   
+    this.socket = dgram.createSocket({
+      type: "udp4"
+    });
+        
     this.socket.on("connect", () => {
       this.console.log("Socket has successfully connected.");
     });
@@ -84,6 +96,9 @@ class Socket {
       
     this.socket.on("listening", () => {
       this.console.notice(this.getAddress());
+      
+      this.setRecvSize(500);
+      this.setSendSize(500);
      });
       
     this.socket.on("message", (message, rinfo) => {
@@ -95,24 +110,16 @@ class Socket {
       this.console.error(error);
       this.close();
     });
-    
-    if (typeof address !== "undefined" && typeof address.address !== "undefined" && typeof address.port !== "undefined") {
-      this.bindAddress = address;
+        
+    if (typeof port === "undefined") {
+      this.socket.bind();
     } else {
-      this.console.error("Unable to bind to the requested socket due to incomplete data provided.");
-      
-      this.close();
-    }
-    
-    this.socket = dgram.createSocket({
-      type: "udp4"
-    });
-    
-    this.socket.bind(this.bindAddress);
+      this.socket.bind(port);
+    }        
   }
   
-  writePacket(address, port, message) {
-    this.socket.send(message.buffer, message.offset, message.buffer.length, port, address, (error) => {
+  writePacket(message) {
+    this.socket.send(message.buffer, 0, message.buffer.length, (error) => {
       if (error) return this.console.error(error);
       
       this.console.debug("Successfully send packet through socket.");
