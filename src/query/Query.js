@@ -13,7 +13,7 @@ class Query {
     this.loadPackets();
     
     this.socket.setup();
-    this.type = "basic";
+    this.type = "full";
     
     this.socket.getSocket().on("message", (message, rinfo) => {
       this.handle(message, this.type);
@@ -106,7 +106,7 @@ class Query {
       
       console.log(StatisticFullResponsePacket);
       
-      this.StatisticResponsePacket = StatisticBasicResponsePacket.payload;
+      this.StatisticResponsePacket = StatisticFullResponsePacket.payload;
     }
   }
   

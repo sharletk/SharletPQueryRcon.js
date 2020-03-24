@@ -16,15 +16,20 @@ class StatisticBasicResponse extends Packet {
   }
   
   decodePayload() {
+    let payload = this.readString().toString();
     this.payload = {};
     
-    this.payload.MOTD = this.parseString();
-    this.payload.gametype = this.parseString();
-    this.payload.map = this.parseString();
-    this.payload.numPlayers = this.parseString();
-    this.payload.maxPlayers = this.parseString();
-    this.payload.hostPort = this.readLShort();
-    this.payload.hostIP = this.parseString();
+    let parsedData = payload.split("\u0000");
+    
+    this.payload.MOTD = parsedData[0];
+    this.payload.gametype = parsedData[1];
+    this.payload.map = parsedData[2];
+    this.payload.numPlayers = parsedData[3];
+    this.payload.maxPlayers = parsedData[4];
+    
+    // Need to do some fix on this, do not use until further notice.
+    this.payload.hostPort = parsedData[5];
+    this.payload.hostIP = parsedData[6];
   }
 };
 

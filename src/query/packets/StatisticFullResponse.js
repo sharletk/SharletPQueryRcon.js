@@ -16,9 +16,22 @@ class StatisticFullResponse extends Packet {
   }
   
   decodePayload() {
+    // Figure out way to effectively parse data.
+    
+    let payloadA = this.readString().toString();
+    let payloadB = this.readString().toString();
+    let payloadC = this.readString().toString();
     this.payload = {};
     
-    this.readData(11);
+    let parsedDataA = payloadA.split("\u0000");
+    let parsedDataB = payloadB.split("\u0000");
+    let parsedDataC = payloadC.split("\u0000");
+    
+    console.log(parsedDataA);
+    console.log(parsedDataB);
+    console.log(parsedDataC);
+    
+    /*this.readData(11);
     
     this.payload.hostname = this.parseString();
     this.payload.gametype = this.parseString();
@@ -36,7 +49,7 @@ class StatisticFullResponse extends Packet {
     this.payload.players = [];
     for (let i = this.getOffset(); i < this.length; i = this.getOffset()) {
       this.payload.players.push(this.parseString());
-    };
+    };*/
   }
 };
 

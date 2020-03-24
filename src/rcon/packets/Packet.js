@@ -28,11 +28,16 @@ class Packet extends BinaryStream {
   }
   
   readString() {
-    return this.readData(this.readUnsignedVarInt());
+    let varint = this.readUnsignedVarInt();
+    
+    let offset = this.getOffset();
+    this.setOffset(offset - 1);
+    
+    return this.readData(varint);
   }
   
   parseString() {
-    return this.readString().toString().replace("\u0000", "");
+    return this.readString().toString();
   }
   
   writeString(str) {
