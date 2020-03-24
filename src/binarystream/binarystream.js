@@ -399,7 +399,7 @@ class BinaryStream {
     }
     
     throw new Error("VarInt did not terminate after 5 bytes!");
-  }
+  }  
   
   readVarInt(buffer = this.getBuffer(), offset = this.getOffset()) {
     let raw = this.readUnsignedVarInt(buffer, offset);

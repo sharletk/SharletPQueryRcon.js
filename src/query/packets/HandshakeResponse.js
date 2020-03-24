@@ -16,7 +16,7 @@ class HandshakeResponse extends Packet {
   }
   
   decodePayload() {
-    this.payload = this.parseString();
+    this.payload = Number(`1${this.parseString()}`);
   }
 };
 

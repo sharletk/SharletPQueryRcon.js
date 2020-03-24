@@ -54,13 +54,13 @@ class Socket {
       
       this.close();
     }
-        
-    this.console.notice(`Connecting to socket with Address: ${this.bindAddress.address} | Port: ${this.bindAddress.port}..
+            
+    /*this.console.notice(`Connecting to socket with Address: ${this.bindAddress.address} | Port: ${this.bindAddress.port}..
     `);
     
     return this.socket.connect(this.bindAddress.port, this.bindAddress.address, (error) => {
       if (error) return this.console.error(error);      
-    });
+    });*/
   }
   
   disconnect() {
@@ -81,7 +81,7 @@ class Socket {
     this.close();
   }
   
-  setup(port) {   
+  setup(socketPort) {       
     this.socket = dgram.createSocket({
       type: "udp4"
     });
@@ -111,15 +111,15 @@ class Socket {
       this.close();
     });
         
-    if (typeof port === "undefined") {
+    if (typeof socketPort === "undefined") {
       this.socket.bind();
     } else {
-      this.socket.bind(port);
+      this.socket.bind(socketPort);
     }        
   }
   
   writePacket(message) {
-    this.socket.send(message.buffer, 0, message.buffer.length, (error) => {
+    this.socket.send(message.buffer, 0, message.buffer.length, this.bindAddress.port, this.bindAddress.address, (error) => {
       if (error) return this.console.error(error);
       
       this.console.debug("Successfully send packet through socket.");
