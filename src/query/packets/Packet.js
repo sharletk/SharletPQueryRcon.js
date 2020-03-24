@@ -9,7 +9,7 @@ class Packet extends BinaryStream {
     super();
     this.QueryConfig = QueryConfig;
     
-    this.sessionID = 1;
+    this.sessionID = -1;
   }
   
   readSessionID() {
@@ -25,7 +25,7 @@ class Packet extends BinaryStream {
   }
   
   readString() {
-    return this.readData(this.readUnsignedVarInt()).toString();
+    return this.readData(this.readUnsignedVarInt());
   }
   
   parseString() {
@@ -34,10 +34,7 @@ class Packet extends BinaryStream {
   
   writeString(str) {
     this.writeUnsignedVarInt(Buffer.byteLength(str));
-    
-    if (str.length === 0) return this;
     this.writeData(Buffer.from(str, "utf8"));
-    return this;
   }
   
   encode() {
@@ -54,7 +51,7 @@ class Packet extends BinaryStream {
   }
   
   decode() {
-    this.offset = 0;
+    this.rewind();
     this.decodeHeader();
     this.decodePayload();
   }

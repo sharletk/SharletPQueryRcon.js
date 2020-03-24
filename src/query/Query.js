@@ -8,6 +8,8 @@ class Query {
     this.console = console;
     
     this.socket = new Socket(console);
+    
+    this.packetPool = new Map();
     this.loadPackets();
     
     this.socket.setup();
@@ -16,6 +18,8 @@ class Query {
     this.socket.getSocket().on("message", (message, rinfo) => {
       this.handle(message, this.type);
     });
+    
+    this.StatisticResponsePacket;
   }
   
   getType() {
@@ -26,9 +30,7 @@ class Query {
     this.type = type;
   }
   
-  loadPackets() {
-    this.packetPool = new Map();
-    
+  loadPackets() {    
     this.packetPool.set("HandshakeRequest", require("./packets/HandshakeRequest.js"));
     this.packetPool.set("HandshakeResponse", require("./packets/HandshakeResponse.js"));
     
@@ -58,7 +60,7 @@ class Query {
     this.socket.writePacket(HandshakeRequestPacket);
   }
   
-  handle(message) {
+  async handle(message) {
     let buffer = new BinaryStream();
     buffer.writeData(message);
     buffer.setOffset(0);
@@ -93,6 +95,8 @@ class Query {
       StatisticBasicResponsePacket.decode();
       
       console.log(StatisticBasicResponsePacket);
+      
+      this.StatisticResponsePacket = StatisticBasicResponsePacket.payload;
     } else {
       let StatisticFullResponsePacket = this.packetPool.get("StatisticFullResponse");
       StatisticFullResponsePacket = new StatisticFullResponsePacket();
@@ -101,6 +105,8 @@ class Query {
       StatisticFullResponsePacket.decode();
       
       console.log(StatisticFullResponsePacket);
+      
+      this.StatisticResponsePacket = StatisticBasicResponsePacket.payload;
     }
   }
   
