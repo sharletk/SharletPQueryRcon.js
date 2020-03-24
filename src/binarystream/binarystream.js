@@ -109,15 +109,6 @@ class BinaryStream {
     
     return buf;
   }
-  
-  // Bool Methods  
-  readBool(b) {
-    return this.readByte(b) !== 0;
-  }
-  
-  writeBool(b) {
-    return this.writeByte(b === true ? 1 : 0);
-  }
     
   
   // Byte Methods
@@ -210,39 +201,6 @@ class BinaryStream {
   }
   
   
-  // Triad Methos
-  readTriad(offset = this._offsetChange(3), byteLength = 3) { 
-    return this.buffer.readIntBE(offset, byteLength);
-  }
-  
-  writeTriad(v, offset = 0, byteLength) {
-    return this._writeTriad(v, offset, byteLength, "BE");
-  }
-  
-  readLTriad(offset = this._offsetChange(3), byteLength = 3) { 
-    return this.buffer.readIntLE(offset, byteLength);
-  }
-  
-  writeLTriad(v, offset = 0, byteLength) {
-    return this._writeTriad(v, offset, byteLength, "LE");
-  }
-  
-  _writeTriad(v, offset, byteLength = 3, type) {
-    let buf = Buffer.alloc(3);
-    
-    switch(type) {
-      case "BE":
-      buf.writeIntBE(v, offset, byteLength);
-      break;
-      
-      case "LE":
-      buf.writeIntLE(v, offset, byteLength);
-      break;
-    }
-    return this.writeData(buf);
-  }
-  
-  
   // Int Methods 
   readInt(offset = this._offsetChange(4)) { 
     return this.buffer.readInt32BE(offset);
@@ -276,118 +234,11 @@ class BinaryStream {
   }
   
   
-  // Float Methos
-  readFloat(offset = this._offsetChange(4)) { 
-    return this.buffer.readFloatBE(offset);
-  }
-  
-  readRoundedFloat() {
-    
-  }
-  
-  writeFloat(v, offset) {
-    return this._writeFloat(v, offset, "BE");
-  }
-  
-  readLFloat(offset = this._offsetChange(4)) { 
-    return this.buffer.readFloatLE(offset);
-  }
-  
-  readRoundedLFloat() {
-    
-  }
-  
-  writeLFloat(v, offset) {
-    return this._writeFloat(v, offset, "LE");
-  }
-  
-  _writeFloat(v, offset, type) {
-    let buf = Buffer.alloc(8);
-    
-    switch(type) {
-      case "BE":
-      buf.writeFloatBE(v, offset);
-      break;
-      
-      case "LE":
-      buf.writeFloatLE(v, offset);
-      break;
-    }
-    return this.writeData(buf);
-  }  
-  
-  // Double Methods
-  readDouble(offset = this._offsetChange(8)) { 
-    return this.buffer.readDoubleBE(offset);
-  }
-  
-  writeDouble(v, offset) {
-    return this._writeDouble(v, offset, "BE");
-  }
-  
-  readLDouble(offset = this._offsetChange(8)) {
-    return this.buffer.readDoubleLE(offset);
-  }
-  
-  writeLDouble(v, offset) {
-    return this._writeDouble(v, offset, "LE");
-  }
-  
-  _writeDouble(v, offset, type) {
-    let buf = Buffer.alloc(8);
-    
-    switch(type) {
-      case "BE":
-      buf.writeDoubleBE(v, offset);
-      break;
-      
-      case "LE":
-      buf.writeDoubleLE(v, offset);
-      break;
-    }
-    return this.writeData(buf);
-  }
-  
-  
-  // Long Methods
-  readLong(offset = this._offsetChange(8)) { 
-    return Number(this.buffer.readBigUInt64BE(offset).toString());
-  }
-  
-  writeLong(v, offset) {
-    return this._writeLong(v, offset, "BE");
-  }
-  
-  readLLong(offset = this._offsetChange(8)) { 
-    return Number(this.buffer.readBigUInt64LE(offset).toString());
-  }
-  
-  writeLLong(v, offset) {
-    return this._writeLong(v, offset, "LE");
-  }
-  
-  _writeLong(v, offset, type) {
-    let buf = Buffer.alloc(8);
-    v = BigInt(v);
-    
-    switch(type) {
-      case "BE":
-      buf.writeBigUInt64BE(v);
-      break;
-      
-      case "LE":
-      buf.writeBigUInt64LE(v);
-      break;
-    }
-    return this.writeData(buf);
-  }
-  
-  
   // VarInt Methods  
   readUnsignedVarInt(buffer = this.getBuffer(), offset = this.getOffset()) {
     let value = 0;
     
-    for (let i = 0; i <= 28; i += 7) {
+    for (let i = 0; i <= 35; i += 7) {
       if (!(buffer[offset])) {
         throw new Error("No bytes left in buffer!");
       }
@@ -398,81 +249,25 @@ class BinaryStream {
       if ((b & 0x80) === 0) return value;
     }
     
-    throw new Error("VarInt did not terminate after 5 bytes!");
-  }  
-  
-  readVarInt(buffer = this.getBuffer(), offset = this.getOffset()) {
-    let raw = this.readUnsignedVarInt(buffer, offset);
-    
-    let temp = (((raw << 63) >> 63) ^ raw) >> 1;
-    
-    return temp ^ (raw & (1 << 63));
+    return 0;     
   }
   
-  writeUnsignedVarInt(value) {    
-    value &= 0xffffffff;    
+  writeUnsignedVarInt(value) {
+    let buf = new BinaryStream();
+        
     for (let i = 0; i < 5; ++i) {
       if ((value >> 7) !== 0) {
-        this.writeByte(value | 0x80);
+        buf.writeByte(value | 0x80);
       } else {
-        this.writeByte(value & 0x7f);
-        return this;
+        buf.writeByte(value & 0x7f);
+        break;
       }
       
-      value = ((value >> 7) & (Number.MAX_SAFE_INTEGER >> 6));
+      value >>= 7;
     }
     
-    throw new Error("Value too large to ve encoded as a VarInt.");
-  }
-  
-  writeVarInt(value) {
-    value = (value << 32 >> 32);
-    return this.writeUnsignedVarInt((value << 1) ^ (value >> 31));
-  }
-  
-  
-  // VarLong Methods
-  readUnsignedVarLong(buffer = this.getBuffer(), offset = this.getOffset()) {
-    let value = 0;
-    for (let i = 0; i <= 63; i += 7) {
-      if (!(buffer[offset])) {
-        throw new Error("No bytes left in buffer!");
-      }
-      
-      let b = this.readByte();
-      value |= ((b & 0x7f) << i);
-      
-      if ((b & 0x80) === 0) return value;
-    }
-    
-    throw new Error("VarLong did not terminate after 10 bytes!");
-  }
-  
-  readVarLong(buffer = this.getBuffer(), offset = this.getOffset()) {
-    let raw = this.readUnsignedVarLong(buffer, offset);
-    
-    let temp = (((raw << 63) >> 63) ^ raw) >> 1;
-    
-    return temp ^ (raw & (1 << 63));
-  }
-  
-  writeUnsignedVarLong(value) {
-    for (let i = 0; i < 10; ++i) {
-      if ((value >> 7) !== 0) {
-        this.writeByte(value | 0x80);
-      } else {
-        this.writeByte(value & 0x7f);
-        return this;
-      }
-      
-      value = ((value >> 7) & (Number.MAX_SAFE_INTEGER >> 6));
-    }
-    
-    throw new Error("Value too large to ve encoded as a VarLong.");
-  }
-  
-  writeVarLong(value) {
-    return this.writeUnsignedVarLong((value << 1) ^ (value >> 63));
+    this.writeData(buf.buffer);
+    return this;
   }
 }
 
