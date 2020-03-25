@@ -13,7 +13,7 @@ class Query {
     this.loadPackets();
     
     this.socket.setup();
-    this.type = "full";
+    this.type = "basic";
     
     this.socket.getSocket().on("message", (message, rinfo) => {
       this.handle(message, this.type);

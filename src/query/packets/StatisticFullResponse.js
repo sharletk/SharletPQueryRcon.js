@@ -16,40 +16,35 @@ class StatisticFullResponse extends Packet {
   }
   
   decodePayload() {
-    // Figure out way to effectively parse data.
+    let payload = "";
     
-    let payloadA = this.readString().toString();
-    let payloadB = this.readString().toString();
-    let payloadC = this.readString().toString();
+    let length;
+    for (length = this.getOffset(); length <= this.length; length) {
+      console.log(length);
+      if (this.feof()) break;
+      let data = this.parseString();
+      length = this.getOffset();
+      payload += data;
+    }
+    
+    payload = payload.split("\u0000");
+    
     this.payload = {};
     
-    let parsedDataA = payloadA.split("\u0000");
-    let parsedDataB = payloadB.split("\u0000");
-    let parsedDataC = payloadC.split("\u0000");
+    this.payload.hostname = payload[3];
+    this.payload.gametype = payload[5];
+    this.payload.gameID = payload[7];
+    this.payload.version = payload[9];
+    this.payload.server_engine = payload[11];
+    this.payload.plugins = payload[13];
+    this.payload.map = payload[15];
+    this.payload.numPlayers = payload[17];
+    this.payload.maxPlayers = payload[19];
+    this.payload.whitelist = payload[21];
+    this.payload.hostIP = payload[23];
+    this.payload.hostPort = payload[25];
     
-    console.log(parsedDataA);
-    console.log(parsedDataB);
-    console.log(parsedDataC);
-    
-    /*this.readData(11);
-    
-    this.payload.hostname = this.parseString();
-    this.payload.gametype = this.parseString();
-    this.payload.gameID = this.parseString();
-    this.payload.version = this.parseString();
-    this.payload.plugins = this.parseString();
-    this.payload.map = this.parseString();
-    this.payload.numPlayers = this.parseString();
-    this.payload.maxPlayers = this.parseString();
-    this.payload.hostPort = this.readLShort();
-    this.payload.hostIP = this.parseString();
-    
-    this.readData(10);
-    
-    this.payload.players = [];
-    for (let i = this.getOffset(); i < this.length; i = this.getOffset()) {
-      this.payload.players.push(this.parseString());
-    };*/
+    this.payload.players = payload.slice(28).filter(n => n.length > 0);
   }
 };
 
