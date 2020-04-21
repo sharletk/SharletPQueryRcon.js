@@ -235,27 +235,27 @@ class BinaryStream {
   
   
   // VarInt Methods  
-  readUnsignedVarInt(buffer = this.getBuffer(), offset = this.getOffset()) {
+  readUnsignedVarInt() {
     let value = 0;
     
     for (let i = 0; i <= 35; i += 7) {
-      if (!(buffer[offset])) {
+      if (this.feof()) {
         throw new Error("No bytes left in buffer!");
       }
       
-      let b = this.readByte();
+      let b = this.getBuffer()[(this.getOffset() + 1)];
       value |= ((b & 0x7f) << i);
       
       if ((b & 0x80) === 0) return value;
     }
     
     return 0;     
-  }
+  }  
   
   writeUnsignedVarInt(value) {
     let buf = new BinaryStream();
         
-    for (let i = 0; i < 5; ++i) {
+    for (let i = 0; i < 5; i++) {
       if ((value >> 7) !== 0) {
         buf.writeByte(value | 0x80);
       } else {
