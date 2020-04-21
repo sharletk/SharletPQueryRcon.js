@@ -3,9 +3,7 @@
 const dgram = require("dgram");
 
 class Socket {
-  constructor(console) {
-    this.console = console;
-    
+  constructor() {
     this.socket;
     this.bindAddress;
   }
@@ -50,12 +48,12 @@ class Socket {
     if (typeof address !== "undefined" && typeof address.address !== "undefined" && typeof address.port !== "undefined") {
       this.bindAddress = address;
     } else {
-      this.console.error("Unable to bind to the requested socket due to incomplete data provided.");
+      console.error("Unable to bind to the requested socket due to incomplete data provided.");
       
       this.close();
     }
             
-    /*this.console.notice(`Connecting to socket with Address: ${this.bindAddress.address} | Port: ${this.bindAddress.port}..
+    /*console.log(`Connecting to socket with Address: ${this.bindAddress.address} | Port: ${this.bindAddress.port}..
     `);
     
     return this.socket.connect(this.bindAddress.port, this.bindAddress.address, (error) => {
@@ -64,19 +62,19 @@ class Socket {
   }
   
   disconnect() {
-    this.console.warning("Disconnecting from socket...");
+    console.warn("Disconnecting from socket...");
     
     return this.socket.disconnect();
   }
   
   close() {
-    this.console.warning("Closing socket...");
+    console.warn("Closing socket...");
     
     return this.socket.close();
   }
   
   kill() {
-    this.console.alert("Killing Socket...");
+    console.alert("Killing Socket...");
     this.disconnect();
     this.close();
   }
@@ -87,27 +85,27 @@ class Socket {
     });
         
     this.socket.on("connect", () => {
-      this.console.log("Socket has successfully connected.");
+      console.log("Socket has successfully connected.");
     });
       
     this.socket.on("close", () => {
-      this.console.alert("Socket has successfully disconnected.");
+      console.alert("Socket has successfully disconnected.");
     });
       
     this.socket.on("listening", () => {
-      this.console.notice(this.getAddress());
+      console.log(this.getAddress());
       
       this.setRecvSize(500);
       this.setSendSize(500);
      });
       
     this.socket.on("message", (message, rinfo) => {
-      this.console.info(message)
-      this.console.info(rinfo);
+      console.info(message)
+      console.info(rinfo);
     });
       
     this.socket.on("error", (error) => {
-      this.console.error(error);
+      console.error(error);
       this.close();
     });
         
@@ -122,7 +120,7 @@ class Socket {
     this.socket.send(message.buffer, 0, message.buffer.length, this.bindAddress.port, this.bindAddress.address, (error) => {
       if (error) return this.console.error(error);
       
-      this.console.debug("Successfully send packet through socket.");
+      console.debug("Successfully send packet through socket.");
     });
   }
 };
