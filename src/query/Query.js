@@ -1,7 +1,7 @@
 "use strict";
 
 const BinaryStream = require("../binarystream/BinaryStream.js");
-const Socket = require("../socket/Socket.js");
+const Socket = require("../socket/udp/Socket.js");
 
 class Query {
   constructor() {    
