@@ -14,7 +14,7 @@ class RCON {
     this.socket.setup();
     
     this.socket.getSocket().on("message", (message, rinfo) => {
-      this.handle(message);
+      this.handle(message, rinfo);
     });
     
     this.loggedIn = false;
@@ -48,8 +48,9 @@ class RCON {
     this.socket.writePacket(LoginPacket);
   }
   
-  handle(message) {
-    
+  handle(message, rinfo) {
+    console.log(message);
+    console.log(rinfo);
   }
   
   send(payload) {

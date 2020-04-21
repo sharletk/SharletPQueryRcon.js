@@ -11,4 +11,4 @@ class Command extends Packet {
   }
 };
 
-module.exports = COMMAND;
+module.exports = Command;

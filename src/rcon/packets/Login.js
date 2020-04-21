@@ -6,7 +6,7 @@ class Login extends Packet {
   constructor() {
     super();
     
-    this.requestID = this.writeRequestID();
+    this.requestID = 1;
     this.type = this.RCONConfig.LOGIN;
   }
 };
