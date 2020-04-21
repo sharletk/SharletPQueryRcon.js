@@ -27,9 +27,6 @@ class Packet extends BinaryStream {
   readString() {
     let varint = this.readUnsignedVarInt();
     
-    let offset = this.getOffset();
-    this.setOffset(offset - 1);
-    
     return this.readData(varint);
   }
   
@@ -39,7 +36,9 @@ class Packet extends BinaryStream {
   
   writeString(str) {
     this.writeUnsignedVarInt(Buffer.byteLength(str));
+    if (str.length === 0) return this;
     this.writeData(Buffer.from(str, "utf8"));
+    return this;
   }
   
   encode() {

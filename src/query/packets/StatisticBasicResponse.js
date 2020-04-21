@@ -20,7 +20,6 @@ class StatisticBasicResponse extends Packet {
     
     let length;
     for (length = this.getOffset(); length <= this.length; length) {
-      console.log(length);
       if (this.feof()) break;
       let data = this.parseString();
       length = this.getOffset();

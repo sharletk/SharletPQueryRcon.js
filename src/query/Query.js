@@ -4,10 +4,8 @@ const BinaryStream = require("../binarystream/BinaryStream.js");
 const Socket = require("../socket/Socket.js");
 
 class Query {
-  constructor(console) {
-    this.console = console;
-    
-    this.socket = new Socket(console);
+  constructor() {    
+    this.socket = new Socket();
     
     this.packetPool = new Map();
     this.loadPackets();
@@ -96,6 +94,10 @@ class Query {
       
       console.log(StatisticBasicResponsePacket);
       
+      
+      setTimeout(() => {
+        this.StatisticResponsePacket = null;
+      }, 10 * 1000);
       this.StatisticResponsePacket = StatisticBasicResponsePacket.payload;
     } else {
       let StatisticFullResponsePacket = this.packetPool.get("StatisticFullResponse");
@@ -106,6 +108,9 @@ class Query {
       
       console.log(StatisticFullResponsePacket);
       
+      setTimeout(() => {
+        this.StatisticResponsePacket = null;
+      }, 10 * 1000);
       this.StatisticResponsePacket = StatisticFullResponsePacket.payload;
     }
   }
