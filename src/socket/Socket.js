@@ -4,11 +4,11 @@ const net = require("net");
 
 class Socket {
   constructor() {    
-    this._id = -1;
-    this._socket;
+    this._id = this._setSocketID();
+    this._socket = null;
     this._ready = false;
     
-    this._bindAddress;
+    this._bindAddress = null;
   }
   
   getAddress() {
@@ -25,6 +25,25 @@ class Socket {
   
   _setEncoding(encoding) {
     this._socket.setEncoding(encoding);
+  }
+  
+  getSocketID() {
+    return this._id;
+  }
+  
+  _setSocketID(id) {
+    const min = -2147483648;
+    const max = 2147483647;
+    
+    this._id = Math.floor(Math.random() * (max - min)) + min;
+  }
+  
+  _getBindAddress() {
+    return this._bindAddress;
+  }
+  
+  _setBindAddress(bindAddress) {
+    this._bindAddress = bindAddress;
   }
   
   _isPending() {
