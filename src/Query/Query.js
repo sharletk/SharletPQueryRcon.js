@@ -1,10 +1,12 @@
 const Socket = require("../Socket/Socket.js");
+const BinaryStream = require("../BinaryStream/BinaryStream.js");
 
 class Query {
   constructor() {
     this._socket;
     this._packets = new Map();
     this._connected = false;
+    this._statType;
     
     this._init();
   }
@@ -38,14 +40,60 @@ class Query {
     this._connected = true;
   }
     
-  async query(port, address) {
+  async query(port, address, statType) {
     if (!(this._connected)) return console.error("Please connect to a address.");
     
+    if (typeof statType === "undefined" || statType === null) statType = "full";
+    
+    if (statType !== "basic" || statType !== "full") statType = "full";
+    
+    this._statType = "basic";    
+    
     let RequestPacket = this._packets.get("RequestPacket");
+    
     await RequestPacket.setSessionID(RequestPacket._generateSessionID());
     await RequestPacket.encode();
     console.log(RequestPacket)
     await this._socket.sendData(RequestPacket.getBuffer());
+  }
+  
+  async _dataParser(message, rinfo) {
+    let binstream = new BinaryStream(message);
+    
+    const type = binstream.readByte();
+    if (type == 0x00) {
+      if (this._statType == "basic") {
+        let BasicResponsePacket = this._packets.get("BasicResponsePacket");
+        
+        await BasicResponsePacket.setBuffer(message);
+        await BasicResponsePacket.decode();
+      } else if (this._statType == "full") {
+        
+      } else {
+        return;
+      }
+    } else if (type == 0x09) {
+      let ResponsePacket = this._packets.get("ResponsePacket");
+      
+      await ResponsePacket.setBuffer(message);
+      await ResponsePacket.decode();
+      console.log(ResponsePacket);
+      
+      let sessionID = await ResponsePacket.getSessionID();
+      let token = await ResponsePacket.getToken();
+      
+      let BasicRequestPacket = this._packets.get("BasicRequestPacket");
+      
+      await BasicRequestPacket.setSessionID(sessionID);
+      await BasicRequestPacket.setToken(token);
+      await BasicRequestPacket.encode();
+      
+      console.log(BasicRequestPacket);
+      
+      await this._socket.sendData(BasicRequestPacket.getBuffer());
+    } else {
+      return;
+    }
   }
 }
 

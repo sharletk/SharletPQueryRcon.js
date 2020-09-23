@@ -6,9 +6,7 @@ class ResponsePacket extends ServerClientPacket {
   }
   
   _decodePayload() {
-    this.setType(this.readByte());
-    this.setSessionID(this.readInt());
-    this.setToken(this.readString());
+    this.setToken(this.readString().replace("\x00", ""));
   }
 }
 
