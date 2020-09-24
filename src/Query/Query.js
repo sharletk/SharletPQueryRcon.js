@@ -69,7 +69,18 @@ class Query {
         
         await BasicResponsePacket.setBuffer(message);
         await BasicResponsePacket.decode();
-        console.log(BasicResponsePacket.getPayload());
+        
+        let payload = BasicResponsePacket.getPayload();
+        
+        return {
+          "motd": payload[0],
+          "gametype": payload[1],
+          "map": payload[2],
+          "numplayers": payload[3],
+          "maxplayers": payload[4],
+          "hostport": payload[5],
+          "hostip": payload[6]
+        };
       } else if (this._statType == "full") {
         
       } else {
