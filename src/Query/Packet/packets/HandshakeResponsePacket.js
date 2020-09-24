@@ -1,6 +1,6 @@
 const ServerClientPacket = require("./ServerClientPacket.js");
 
-class ResponsePacket extends ServerClientPacket {
+class HandshakeResponsePacket extends ServerClientPacket {
   constructor() {
     super();
   }
@@ -10,4 +10,4 @@ class ResponsePacket extends ServerClientPacket {
   }
 }
 
-module.exports = ResponsePacket;
+module.exports = HandshakeResponsePacket;

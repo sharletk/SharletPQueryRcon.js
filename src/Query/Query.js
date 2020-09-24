@@ -15,11 +15,11 @@ class Query {
   }
   
   _initializePackets() {
-    const RequestPacket = require("./Packet/packets/RequestPacket.js");
-    this._packets.set("RequestPacket", new RequestPacket());
+    const HandshakeRequestPacket = require("./Packet/packets/HandshakeRequestPacket.js");
+    this._packets.set("HandshakeRequestPacket", new HandshakeRequestPacket());
     
-    const ResponsePacket = require("./Packet/packets/ResponsePacket.js");
-    this._packets.set("ResponsePacket", new ResponsePacket());
+    const HandshakeResponsePacket = require("./Packet/packets/HandshakeResponsePacket.js");
+    this._packets.set("HandshakeResponsePacket", new HandshakeResponsePacket());
     
     const BasicRequestPacket = require("./Packet/packets/BasicRequestPacket.js");
     this._packets.set("BasicRequestPacket", new BasicRequestPacket());
@@ -73,12 +73,12 @@ class Query {
     
     this._statType = statType;    
     
-    let RequestPacket = this._packets.get("RequestPacket");
+    let HandshakeRequestPacket = this._packets.get("HandshakeRequestPacket");
     
-    await RequestPacket.setSessionID(RequestPacket._generateSessionID());
-    await RequestPacket.encode();
-    console.log(RequestPacket)
-    await this._socket.sendData(RequestPacket.getBuffer());
+    await HandshakeRequestPacket.setSessionID(HandshakeRequestPacket._generateSessionID());
+    await HandshakeRequestPacket.encode();
+    console.log(HandshakeRequestPacket)
+    await this._socket.sendData(HandshakeRequestPacket.getBuffer());
   }
   
   async _dataParser(message, rinfo) {
@@ -134,15 +134,15 @@ class Query {
       
       await this.disconnect();
     } else if (type == 0x09) {
-      let ResponsePacket = this._packets.get("ResponsePacket");
+      let HandshakeResponsePacket = this._packets.get("HandshakeResponsePacket");
       
-      await ResponsePacket.write(message);
-      await ResponsePacket.rewind();
-      await ResponsePacket.decode();
-      console.log(ResponsePacket);
+      await HandshakeResponsePacket.write(message);
+      await HandshakeResponsePacket.rewind();
+      await HandshakeResponsePacket.decode();
+      console.log(HandshakeResponsePacket);
       
-      let sessionID = await ResponsePacket.getSessionID();
-      let token = await ResponsePacket.getToken();
+      let sessionID = await HandshakeResponsePacket.getSessionID();
+      let token = await HandshakeResponsePacket.getToken();
       
       if (this._statType == "basic") {
         let BasicRequestPacket = this._packets.get("BasicRequestPacket");

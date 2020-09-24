@@ -1,6 +1,6 @@
 const ClientServerPacket = require("./ClientServerPacket.js");
 
-class RequestPacket extends ClientServerPacket {
+class HandshakeRequestPacket extends ClientServerPacket {
   constructor() {
     super(); 
     
@@ -8,4 +8,4 @@ class RequestPacket extends ClientServerPacket {
   }
 }
 
-module.exports = RequestPacket;
+module.exports = HandshakeRequestPacket;
