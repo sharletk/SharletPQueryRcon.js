@@ -1,3 +1,24 @@
+/**
+ *
+ *
+ *
+ * ╭━━━┳╮╱╱╱╱╱╱╭╮╱╱╱╭╮╭━━━╮
+ * ┃╭━╮┃┃╱╱╱╱╱╱┃┃╱╱╭╯╰┫╭━╮┃
+ * ┃╰━━┫╰━┳━━┳━┫┃╭━┻╮╭┫╰━╯┃
+ * ╰━━╮┃╭╮┃╭╮┃╭┫┃┃┃━┫┃┃╭━━╯
+ * ┃╰━╯┃┃┃┃╭╮┃┃┃╰┫┃━┫╰┫┃
+ * ╰━━━┻╯╰┻╯╰┻╯╰━┻━━┻━┻╯
+ *
+ *
+ *
+ *  @author SharletP
+ *   @file BasicResponsePacket.js
+ *   (c) ALL RIGHTS RESERVED.
+ *
+*/
+
+"use strict";
+
 const ServerClientPacket = require("./ServerClientPacket.js");
 
 class BasicResponsePacket extends ServerClientPacket {
@@ -6,6 +27,11 @@ class BasicResponsePacket extends ServerClientPacket {
     
     this._payload = [];
   }
+  
+  /**
+   * Decode the payload.
+   *
+   */
   
   _decodePayload() {    
     console.log(this._buffer);

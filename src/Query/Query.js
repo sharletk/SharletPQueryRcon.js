@@ -1,3 +1,24 @@
+/**
+ *
+ *
+ *
+ * ╭━━━┳╮╱╱╱╱╱╱╭╮╱╱╱╭╮╭━━━╮
+ * ┃╭━╮┃┃╱╱╱╱╱╱┃┃╱╱╭╯╰┫╭━╮┃
+ * ┃╰━━┫╰━┳━━┳━┫┃╭━┻╮╭┫╰━╯┃
+ * ╰━━╮┃╭╮┃╭╮┃╭┫┃┃┃━┫┃┃╭━━╯
+ * ┃╰━╯┃┃┃┃╭╮┃┃┃╰┫┃━┫╰┫┃
+ * ╰━━━┻╯╰┻╯╰┻╯╰━┻━━┻━┻╯
+ *
+ *
+ *
+ *  @author SharletP
+ *   @file Query.js
+ *   (c) ALL RIGHTS RESERVED.
+ *
+*/
+
+"use strict";
+
 const Socket = require("../Socket/Socket.js");
 const BinaryStream = require("../BinaryStream/BinaryStream.js");
 
@@ -13,6 +34,11 @@ class Query {
     
     this._init();
   }
+  
+  /**
+   * Initialize all the required packets.
+   *
+   */
   
   _initializePackets() {
     const HandshakeRequestPacket = require("./Packet/packets/HandshakeRequestPacket.js");
@@ -34,6 +60,11 @@ class Query {
     this._packets.set("FullResponsePacket", new FullResponsePacket());
   }
   
+  /**
+   * Initialize the socket.
+   *
+   */
+  
   async _init() {
     this._socket = await (new Socket());
     await this._socket.createSocket();
@@ -43,24 +74,53 @@ class Query {
     });
   }
   
+  /**
+   * Connect to a remote address.
+   *
+   * @param {number} port
+   * @param {string} address
+   */
+  
   async connect(port, address) {
     await this._socket.connect(port, address);
     this._connected = true;
   }
+  
+  /**
+   * Disconnect from a remote address.
+   *
+   */
   
   async disconnect() {
     await this._socket.disconnect();
     this._connected = false;
   }
   
+  /**
+   * Destroy the socket.
+   *
+   */
+  
   async destroy() {
     await this._socket.destroySocket();
     this._connected = false;
   }
   
+  /**
+   * Get the data.
+   *
+   * @return {object} data
+   */
+  
   getData() {
     return this._data;
   }
+  
+  /**
+   * Query a server.
+   *
+   * @param {string} statType
+   */
     
   async query(statType) {
     if (!(this._connected)) return console.error("Please connect to a address.");
@@ -80,6 +140,14 @@ class Query {
     console.log(HandshakeRequestPacket)
     await this._socket.sendData(HandshakeRequestPacket.getBuffer());
   }
+  
+  /**
+   * Parse the incoming data from socket.
+   *
+   * @param {buffer} message
+   * @param {object} rinfo
+   * @return {*}
+   */
   
   async _dataParser(message, rinfo) {
     console.log(message);

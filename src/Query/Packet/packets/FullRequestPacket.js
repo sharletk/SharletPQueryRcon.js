@@ -1,3 +1,24 @@
+/**
+ *
+ *
+ *
+ * ╭━━━┳╮╱╱╱╱╱╱╭╮╱╱╱╭╮╭━━━╮
+ * ┃╭━╮┃┃╱╱╱╱╱╱┃┃╱╱╭╯╰┫╭━╮┃
+ * ┃╰━━┫╰━┳━━┳━┫┃╭━┻╮╭┫╰━╯┃
+ * ╰━━╮┃╭╮┃╭╮┃╭┫┃┃┃━┫┃┃╭━━╯
+ * ┃╰━╯┃┃┃┃╭╮┃┃┃╰┫┃━┫╰┫┃
+ * ╰━━━┻╯╰┻╯╰┻╯╰━┻━━┻━┻╯
+ *
+ *
+ *
+ *  @author SharletP
+ *   @file FullRequestPacket.js
+ *   (c) ALL RIGHTS RESERVED.
+ *
+*/
+
+"use strict";
+
 const ClientServerPacket = require("./ClientServerPacket.js");
 
 class FullRequestPacket extends ClientServerPacket {
@@ -6,6 +27,11 @@ class FullRequestPacket extends ClientServerPacket {
     
     this.setType(this.getConfig().Statistics)
   }
+  
+  /**
+   * Encode the packet payload.
+   *
+   */
   
   _encodePayload() {
     this.writeInt(this.getToken());
