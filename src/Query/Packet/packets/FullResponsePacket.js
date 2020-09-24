@@ -48,7 +48,7 @@ class FullResponsePacket extends ServerClientPacket {
     
     let players = [];
     if (!(this.feof())) {
-      for (let i = 1; i <= Nunber(this._payload[13]); i++) {
+      for (let i = 1; i <= Number(this._payload[13]); i++) {
         players.push(this.readString().replace("\x00", ""));
       }
     }
