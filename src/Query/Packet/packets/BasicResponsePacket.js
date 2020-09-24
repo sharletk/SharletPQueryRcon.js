@@ -4,18 +4,21 @@ class BasicResponsePacket extends ServerClientPacket {
   constructor() {
     super();
     
-    this._data = {};
+    this._payload = [];
   }
   
-  _decodePayload() {
-    this.setType(this.readByte());
-    this.setSessionID(this.readInt());
-    
-    console.log(this.readString());
-    
-    this._data = {
-       
-    }
+  _decodePayload() {    
+    console.log(this._buffer);
+    console.log(this._offset);
+    console.log(this.getRemainingLength());
+    for (let i = 1; i <= 7; i++) {
+      if (i == 6) {
+        this._payload.push(this.readLShort());
+        continue;
+      }
+            
+      this._payload.push(this.readString().replace("\x00", ""));
+    }        
   }
 }
 

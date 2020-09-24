@@ -58,7 +58,9 @@ class Query {
   }
   
   async _dataParser(message, rinfo) {
-    let binstream = new BinaryStream(message);
+    console.log(message);
+    let binstream = new BinaryStream();
+    binstream.setBuffer(message);
     
     const type = binstream.readByte();
     if (type == 0x00) {
@@ -67,6 +69,7 @@ class Query {
         
         await BasicResponsePacket.setBuffer(message);
         await BasicResponsePacket.decode();
+        console.log(BasicResponsePacket.getPayload());
       } else if (this._statType == "full") {
         
       } else {
