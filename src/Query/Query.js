@@ -137,7 +137,6 @@ class Query {
     
     await HandshakeRequestPacket.setSessionID(HandshakeRequestPacket._generateSessionID());
     await HandshakeRequestPacket.encode();
-    console.log(HandshakeRequestPacket);
     await this._socket.sendData(HandshakeRequestPacket.getBuffer());
   }
   
@@ -150,7 +149,6 @@ class Query {
    */
   
   async _dataParser(message, rinfo) {
-    console.log(message);
     let binstream = new BinaryStream();
     binstream.setBuffer(message);
     
@@ -207,7 +205,6 @@ class Query {
       await HandshakeResponsePacket.write(message);
       await HandshakeResponsePacket.rewind();
       await HandshakeResponsePacket.decode();
-      console.log(HandshakeResponsePacket);
       
       let sessionID = await HandshakeResponsePacket.getSessionID();
       let token = await HandshakeResponsePacket.getToken();
@@ -219,8 +216,6 @@ class Query {
         await BasicRequestPacket.setToken(token);
         await BasicRequestPacket.encode();
       
-        console.log(BasicRequestPacket);
-      
         await this._socket.sendData(BasicRequestPacket.getBuffer());
       } else if (this._statType == "full") {
         let FullRequestPacket = this._packets.get("FullRequestPacket");
@@ -228,8 +223,6 @@ class Query {
         await FullRequestPacket.setSessionID(sessionID);
         await FullRequestPacket.setToken(token);
         await FullRequestPacket.encode();
-      
-        console.log(FullRequestPacket);
       
         await this._socket.sendData(FullRequestPacket.getBuffer());
       } else {

@@ -157,7 +157,6 @@ class Rcon {
     await LoginPacket.setRequestID(LoginPacket._generateRequestID());
     await LoginPacket.setPayload(this.__password);  
     await LoginPacket.encode();
-    console.log(LoginPacket);
     await this._socket.sendData(LoginPacket.getBuffer());
   }
   
@@ -168,7 +167,6 @@ class Rcon {
    */
   
   async _dataParser(data) {
-    console.log(data);
     let binstream = new BinaryStream();
     binstream.setBuffer(data);
     
@@ -181,8 +179,6 @@ class Rcon {
       await LoginResponsePacket.setBuffer(data);
       await LoginResponsePacket.decode();
       
-      console.log(LoginResponsePacket);
-      
       let requestID = await LoginResponsePacket.getRequestID();
       
       if (requestID == -1) return console.error("Authentication Failed.");
@@ -191,8 +187,7 @@ class Rcon {
       
       await CommandPacket.setRequestID(requestID);
       await CommandPacket.setPayload(this._command);
-      await CommandPacket.encode();      
-      console.log(CommandPacket);      
+      await CommandPacket.encode();          
       await this._socket.sendData(CommandPacket.getBuffer());      
     } else if (type == 0x00) {
       let CommandResponsePacket = this._packets.get("CommandResponsePacket");
@@ -201,8 +196,6 @@ class Rcon {
       await CommandResponsePacket.decode();
       
       this._data = await CommandResponsePacket.getPayload();
-      
-      console.log(CommandResponsePacket);
       
       await this.disconnect();
     } else {
