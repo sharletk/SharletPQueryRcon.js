@@ -525,14 +525,14 @@ class BinaryStream {
    * @return {string}
    */ 
   
-  readString() {
+  readString(encoding = this._encoding) {
     let start = this._offset;
     let b = this.readByte();
     while(b !== 0) {
       b = this.readByte();
     }
     
-    return this._buffer.toString(this._encoding, start, this._offset);
+    return this._buffer.toString(encoding, start, this._offset);
   }
   
   /**
@@ -541,10 +541,10 @@ class BinaryStream {
    * @param {string} value
    */
   
-  writeString(value) {
+  writeString(value, encoding = this._encoding) {
     let length = Buffer.byteLength(value);
     let buf = Buffer.alloc(length);
-    buf.write(value, length, this._encoding);
+    buf.write(value, 0, length, encoding);
     this._append(buf);
   }
 }
