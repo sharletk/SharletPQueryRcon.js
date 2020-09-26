@@ -4,7 +4,7 @@
   "description": "A Query and Rcon Client for Minecraft Bedrock Servers in Node.js",
   "main": "./src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "echo \"Error: no test specified\" ",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
   },
