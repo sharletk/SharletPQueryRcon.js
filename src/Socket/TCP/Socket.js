@@ -67,7 +67,7 @@ class Socket {
       "port": this._socket.remotePort,
       "family": this._socket.remoteFamily,
       "address": this._socket.remoteAddress
-    }
+    };
   }
   
   /**

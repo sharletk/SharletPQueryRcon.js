@@ -432,7 +432,7 @@ class BinaryStream {
   readString(encoding = this._encoding) {
     let start = this._offset;
     let b = this.readByte();
-    while(b !== 0) {
+    while (b !== 0) {
       b = this.readByte();
     }
     

@@ -20,8 +20,8 @@
 "use strict";
 
 module.exports = {
-  "Login": 03,
-  "Login_Response": 02,
-  "Command": 02,
-  "Command_Response": 00
-}
+  "Login": 0x03,
+  "Login_Response": 0x02,
+  "Command": 0x02,
+  "Command_Response": 0x00
+};

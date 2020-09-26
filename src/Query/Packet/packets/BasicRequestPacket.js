@@ -25,7 +25,7 @@ class BasicRequestPacket extends ClientServerPacket {
   constructor() {
     super();
     
-    this.setType(this.getConfig().Statistics)
+    this.setType(this.getConfig().Statistics);
   }
   
   /**

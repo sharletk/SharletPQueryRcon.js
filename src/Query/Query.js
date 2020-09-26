@@ -137,7 +137,7 @@ class Query {
     
     await HandshakeRequestPacket.setSessionID(HandshakeRequestPacket._generateSessionID());
     await HandshakeRequestPacket.encode();
-    console.log(HandshakeRequestPacket)
+    console.log(HandshakeRequestPacket);
     await this._socket.sendData(HandshakeRequestPacket.getBuffer());
   }
   
