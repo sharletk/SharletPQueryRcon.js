@@ -19,7 +19,7 @@
 
 "use strict";
 
-const Socket = require("../Socket/Socket.js");
+const Socket = require("../Socket/UDP/Socket.js");
 const BinaryStream = require("../BinaryStream/BinaryStream.js");
 
 class Query {
