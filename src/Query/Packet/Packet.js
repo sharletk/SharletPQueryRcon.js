@@ -175,9 +175,9 @@ class Packet extends BinaryStream {
    */
   
   _encodeHeader() {
-    this.writeShort(this.getMagic());
-    this.writeByte(this.getType());
-    this.writeInt(this.getSessionID());
+    this.writeShort(this.getMagic()); // Encode the Query Magic
+    this.writeByte(this.getType()); // Encode the Packet Type
+    this.writeInt(this.getSessionID()); // Encode the Session ID.
   }
   
   /**
@@ -208,8 +208,8 @@ class Packet extends BinaryStream {
    */
   
   _decodeHeader() {
-    this.setType(this.readByte());
-    this.setSessionID(this.readInt());
+    this.setType(this.readByte()); // Decode the packet type.
+    this.setSessionID(this.readInt()); // Decode the Session ID.
   }
   
   /**

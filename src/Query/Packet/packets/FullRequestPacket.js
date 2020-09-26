@@ -34,8 +34,8 @@ class FullRequestPacket extends ClientServerPacket {
    */
   
   _encodePayload() {
-    this.writeInt(this.getToken());
-    this.writeInt(0);
+    this.writeInt(this.getToken()); // Encode the challenge token.
+    this.writeInt(0); // Encode a 4 byte padding.
   }
 }
 

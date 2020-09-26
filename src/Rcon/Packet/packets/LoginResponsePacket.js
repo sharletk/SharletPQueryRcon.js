@@ -1,3 +1,24 @@
+/**
+ *
+ *
+ *
+ * ╭━━━┳╮╱╱╱╱╱╱╭╮╱╱╱╭╮╭━━━╮
+ * ┃╭━╮┃┃╱╱╱╱╱╱┃┃╱╱╭╯╰┫╭━╮┃
+ * ┃╰━━┫╰━┳━━┳━┫┃╭━┻╮╭┫╰━╯┃
+ * ╰━━╮┃╭╮┃╭╮┃╭┫┃┃┃━┫┃┃╭━━╯
+ * ┃╰━╯┃┃┃┃╭╮┃┃┃╰┫┃━┫╰┫┃
+ * ╰━━━┻╯╰┻╯╰┻╯╰━┻━━┻━┻╯
+ *
+ *
+ *
+ *  @author SharletP
+ *   @file LoginResponsePacket.js
+ *   (c) ALL RIGHTS RESERVED.
+ *
+*/
+
+"use strict";
+
 const ServerClientPacket = require("./ServerClientPacket.js");
 
 class LoginResponsePacket extends ServerClientPacket {
@@ -5,8 +26,13 @@ class LoginResponsePacket extends ServerClientPacket {
     super();
   }
   
+  /**
+   * Decode the packet payload.
+   *
+   */
+  
   _decodePayload() {
-    this.readShort();
+    this.readLShort(); // Decode the padding
   }
 }
 

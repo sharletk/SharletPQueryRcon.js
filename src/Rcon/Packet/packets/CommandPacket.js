@@ -1,3 +1,24 @@
+/**
+ *
+ *
+ *
+ * ╭━━━┳╮╱╱╱╱╱╱╭╮╱╱╱╭╮╭━━━╮
+ * ┃╭━╮┃┃╱╱╱╱╱╱┃┃╱╱╭╯╰┫╭━╮┃
+ * ┃╰━━┫╰━┳━━┳━┫┃╭━┻╮╭┫╰━╯┃
+ * ╰━━╮┃╭╮┃╭╮┃╭┫┃┃┃━┫┃┃╭━━╯
+ * ┃╰━╯┃┃┃┃╭╮┃┃┃╰┫┃━┫╰┫┃
+ * ╰━━━┻╯╰┻╯╰┻╯╰━┻━━┻━┻╯
+ *
+ *
+ *
+ *  @author SharletP
+ *   @file CommandPacket.js
+ *   (c) ALL RIGHTS RESERVED.
+ *
+*/
+
+"use strict";
+
 const ServerClientPacket = require("./ServerClientPacket.js");
 
 class CommandPacket extends ServerClientPacket {
@@ -7,13 +28,23 @@ class CommandPacket extends ServerClientPacket {
     this._init();
   }
   
+  /**
+   * Initialize the packet type.
+   *
+   */
+  
   _init() {
     this.setType(this.getConfig().Command);
   }
   
+  /**
+   * Encode the packet payload.
+   *
+   */
+  
   _encodePayload() {
-    this.writeString(this.getPayload(), "ascii");
-    this.writeShort(0);
+    this.writeString(this.getPayload(), "ascii"); // Encode the payload string.
+    this.writeShort(0); // Encode the padding bytes.
   }
 }
 

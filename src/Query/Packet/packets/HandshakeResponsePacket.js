@@ -32,7 +32,7 @@ class HandshakeResponsePacket extends ServerClientPacket {
    */
   
   _decodePayload() {
-    this.setToken(this.readString().replace("\x00", ""));
+    this.setToken(this.readString().replace("\x00", "")); // Decode the challenge token.
   }
 }
 

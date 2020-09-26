@@ -34,7 +34,7 @@ class BasicRequestPacket extends ClientServerPacket {
   */
   
   _encodePayload() {
-    this.writeInt(this.getToken());
+    this.writeInt(this.getToken()); // Encode the challenge token.
   }
 }
 

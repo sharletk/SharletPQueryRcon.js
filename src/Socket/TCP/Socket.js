@@ -1,3 +1,24 @@
+/**
+ *
+ *
+ *
+ * ╭━━━┳╮╱╱╱╱╱╱╭╮╱╱╱╭╮╭━━━╮
+ * ┃╭━╮┃┃╱╱╱╱╱╱┃┃╱╱╭╯╰┫╭━╮┃
+ * ┃╰━━┫╰━┳━━┳━┫┃╭━┻╮╭┫╰━╯┃
+ * ╰━━╮┃╭╮┃╭╮┃╭┫┃┃┃━┫┃┃╭━━╯
+ * ┃╰━╯┃┃┃┃╭╮┃┃┃╰┫┃━┫╰┫┃
+ * ╰━━━┻╯╰┻╯╰┻╯╰━┻━━┻━┻╯
+ *
+ *
+ *
+ *  @author SharletP
+ *   @file Socket.js
+ *   (c) ALL RIGHTS RESERVED.
+ *
+*/
+
+"use strict";
+
 const net = require("net");
 
 class Socket {
@@ -5,17 +26,41 @@ class Socket {
     this._socket;
   }
   
+  /**
+   * Return the socket.
+   *
+   * @return {object}
+   */
+  
   getSocket() {
     return this._socket;
   }
+  
+  /**
+   * Set the socket.
+   *
+   * @param {*} socket
+   */
   
   setSocket(socket) {
     this._socket = socket;
   }
   
+  /**
+   * Return the local bound address.
+   *
+   * @return {object}
+   */
+  
   getAddress() {
     return this._socket.address();
   }
+  
+  /**
+   * Return the remote bound address.
+   *
+   * @return {object}
+   */
   
   getRemoteAddress() {
     return {
@@ -24,6 +69,11 @@ class Socket {
       "address": this._socket.remoteAddress
     }
   }
+  
+  /**
+   * Create a new socket.
+   *
+   */
   
   async createSocket() {
     this._socket = await net.Socket();
@@ -59,53 +109,129 @@ class Socket {
     });
   }
   
+  /**
+   * Destroy a socket.
+   *
+   */
+  
   async destroySocket() {
     await this._socket.destroy();
   }
+  
+  /**
+   * Return the buffer size.
+   *
+   * @return {number}
+   */
   
   getBufferSize() {
     return this._socket.bufferSize;
   }
   
+  /**
+   * Return the amount of bytes read.
+   *
+   * @return {number}
+   */
+  
   getBytesRead() {
     return this._socket.bytesRead;
   }
+  
+  /**
+   * Return the amount of bytes written.
+   *
+   * @return {number}
+   */
   
   getBytesWritten() {
     return this._socket.bytesWritten;
   }
   
+  /**
+   * Connect to a address.
+   *
+   * @param {number} port
+   * @param {string} address
+   */
+  
   async connect(port, address) {
     await this._socket.connect(port, address);
   }
+  
+  /**
+   * Disconnect from the address.
+   *
+   */
   
   async disconnect() {
     await this._socket.end();
   }
   
+  /**
+   * Return the connecting socket status.
+   *
+   * @return {bool}
+   */
+  
   _connecting() {
     return this._socket.connecting;
   }
+  
+  /**
+   * Return the destroyed socket status.
+   *
+   * @return {bool}
+   */
   
   _destroyed() {
     return this._socket.destroyed;
   }
   
+  /**
+   * Return the pending socket status.
+   *
+   * @return {bool}
+   */
+  
   _pending() {
     return this._socket.pending;
   }
+  
+  /**
+   * Pause the data drain.
+   *
+   */
   
   pauseStream() {
     this._socket.pause();
   }
   
+  /**
+   * Resume the data drain.
+   *
+   */
+  
   resumeStream() {
     this._socket.resume();
   }
   
+  /**
+   * Set an encoding scheme.
+   *
+   * @param {string} encoding
+   */
+  
   setEncoding(encoding) {
     this._socket.setEncoding(encoding);
   }
+  
+  /**
+   * Send data through the socket.
+   *
+   * @param {buffer} buf
+   * @param {string} encoding
+   */
   
   async sendData(buf, encoding = "utf8") {
     await this._socket.write(buf, encoding);

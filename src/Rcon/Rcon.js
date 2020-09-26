@@ -1,3 +1,24 @@
+/**
+ *
+ *
+ *
+ * ╭━━━┳╮╱╱╱╱╱╱╭╮╱╱╱╭╮╭━━━╮
+ * ┃╭━╮┃┃╱╱╱╱╱╱┃┃╱╱╭╯╰┫╭━╮┃
+ * ┃╰━━┫╰━┳━━┳━┫┃╭━┻╮╭┫╰━╯┃
+ * ╰━━╮┃╭╮┃╭╮┃╭┫┃┃┃━┫┃┃╭━━╯
+ * ┃╰━╯┃┃┃┃╭╮┃┃┃╰┫┃━┫╰┫┃
+ * ╰━━━┻╯╰┻╯╰┻╯╰━┻━━┻━┻╯
+ *
+ *
+ *
+ *  @author SharletP
+ *   @file Rcon.js
+ *   (c) ALL RIGHTS RESERVED.
+ *
+*/
+
+"use strict";
+
 const Socket = require("../Socket/TCP/Socket.js");
 const BinaryStream = require("../BinaryStream/BinaryStream.js");
 
@@ -18,6 +39,11 @@ class Rcon {
     this._command;
   }
   
+  /**
+   * Initialize packets.
+   *
+   */
+  
   _initializePackets() {
     const LoginPacket = require("./Packet/packets/LoginPacket.js");
     this._packets.set("LoginPacket", new LoginPacket());
@@ -32,6 +58,11 @@ class Rcon {
     this._packets.set("CommandResponsePacket", new CommandResponsePacket());
   }
   
+  /**
+   * Initialize the socket.
+   *
+   */
+  
   async _init() {
     this._socket = await (new Socket());
     await this._socket.createSocket();
@@ -41,36 +72,82 @@ class Rcon {
     });
   }
   
+  /**
+   * Connect to a address.
+   *
+   * @param {number} port
+   * @param {string} address
+   */
+  
   async connect(port, address) {
     await this._socket.connect(port, address);
     this._connected = true;
   }
+  
+  /**
+   * Disconnect from a address.
+   *
+   */
   
   async disconnect() {
     await this._socket.disconnect();
     this._connected = false;
   }
   
+  /**
+   * Destroy thr socket.
+   *
+   */
+  
   async destroy() {
     await this._socket.destroySocket();
     this._connected = false;
   }
   
+  /**
+   * Set the RCON Server Password
+   *
+   * @param {string} password
+   */
+  
   setPassword(password) {
     this.__password = password;
   }
+  
+  /**
+   * Get the stored RCON Server Command
+   *
+   * @return {string}
+   */
   
   getCommand() {
     return this._command;
   }
   
+  /**
+   * Set the stored RCON Server Command
+   *
+   * @param {string} command
+   */
+  
   setCommand(command) {
     this._command = command;
   }
   
+  /**
+   * Get the data recieved back from the RCON Server.
+   *
+   * @return {string}
+   */
+  
   getData() {
     return this._data;
   }
+  
+  /**
+   * Execute the command
+   *
+   */
   
   async execute() {
     await this._initializePackets();
@@ -83,6 +160,12 @@ class Rcon {
     console.log(LoginPacket);
     await this._socket.sendData(LoginPacket.getBuffer());
   }
+  
+  /**
+   * Parse the data recieved by the socket.
+   *
+   * @param {buffer} data
+   */
   
   async _dataParser(data) {
     console.log(data);
