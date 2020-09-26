@@ -78,7 +78,7 @@ class Socket {
     });
     
     this._socket.on("disconnect", () => {
-      console.alert("Successfull socket disconnect from the address.");
+      console.warn("Successfull socket disconnect from the address.");
     });
   }
   
