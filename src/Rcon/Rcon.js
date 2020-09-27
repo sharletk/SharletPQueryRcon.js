@@ -149,7 +149,9 @@ class Rcon {
    *
    */
   
-  async execute() {
+  async execute() {  
+    if (!(this._connected)) return console.error("[SharletPQueryRcon/Query] Please connect to a address.");
+    
     await this._initializePackets();
     
     let LoginPacket = this._packets.get("LoginPacket");
@@ -181,7 +183,7 @@ class Rcon {
       
       let requestID = await LoginResponsePacket.getRequestID();
       
-      if (requestID == -1) return console.error("Authentication Failed.");
+      if (requestID == -1) return console.error("[SharletPQueryRcon/Rcon] Authentication Failed.");
       
       let CommandPacket = this._packets.get("CommandPacket");
       

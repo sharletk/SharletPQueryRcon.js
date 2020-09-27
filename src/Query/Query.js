@@ -50,7 +50,7 @@ class Query {
     const BasicRequestPacket = require("./Packet/packets/BasicRequestPacket.js");
     this._packets.set("BasicRequestPacket", new BasicRequestPacket());
     
-    const BasicResponsePacket = require("./Packet/packets/BasicResponsePacket.js");
+    const BasicResponsePacket = require("./&$Packet/packets/BasicResponsePacket.js");
     this._packets.set("BasicResponsePacket", new BasicResponsePacket());
     
     const FullRequestPacket = require("./Packet/packets/FullRequestPacket.js");
@@ -69,7 +69,7 @@ class Query {
     this._socket = await (new Socket());
     await this._socket.createSocket();
     
-    this._socket.getSocket().on("message", (message, rinfo) => {
+    await this._socket.getSocket().on("message", (message, rinfo) => {
       this._dataParser(message, rinfo);
     });
   }
@@ -122,12 +122,10 @@ class Query {
    * @param {string} statType
    */
     
-  async query(statType) {
-    if (!(this._connected)) return console.error("Please connect to a address.");
+  async query(statType = "full") {    
+    if (!(this._connected)) return console.error("[SharletPQueryRcon/Query] Please connect to a address.");
     
-    await this._initializePackets();
-    
-    if (typeof statType === "undefined" || statType === null) statType = "full";
+    await this._initializePackets();        
     
     if (statType !== "basic" && statType !== "full") statType = "full";
     

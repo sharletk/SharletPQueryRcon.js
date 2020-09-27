@@ -64,21 +64,21 @@ class Socket {
     this._socket = await dgram.createSocket("udp4");
     
     this._socket.on("error", (error) => {
-      console.error(error);
+      console.error(`[SharletPQueryRcon/UDP/Socket] ${error}`);
       this._socket.close();
     });
     
     this._socket.on("listening", () => {
       let address = this._socket.address();
-      console.info(`Listening on ${address.address}:${address.port} [${address.family}]`);
+      console.info(`[SharletPQueryRcon/UDP/Socket] Listening on ${address.address}:${address.port} [${address.family}]`);
     });
     
     this._socket.on("connect", () => {
-      console.debug("Successfull socket connection established to the address.");
+      console.debug("[SharletPQueryRcon/UDP/Socket] Successfull socket connection established to the address.");
     });
     
     this._socket.on("disconnect", () => {
-      console.warn("Successfull socket disconnect from the address.");
+      console.warn("[SharletPQueryRcon/UDP/Socket] Successfull socket disconnect from the address.");
     });
   }
   

@@ -79,33 +79,33 @@ class Socket {
     this._socket = await net.Socket();
     
     this._socket.on("close", (error) => {
-      if (error) console.error("Socket was closed due to transmission error.");
+      if (error) console.error("[SharletPQueryRcon/TCP/Socket] Socket was closed due to transmission error.");
       
-      console.log("Socket successfully closed.");
+      console.log("[SharletPQueryRcon/TCP/Socket] Socket successfully closed.");
     });
     
     this._socket.on("connect", () => {
-      console.log("Successful socket connection established.");
+      console.log("[SharletPQueryRcon/TCP/Socket] Successful socket connection established.");
     });
     
     this._socket.on("drain", () => {
-      console.debug("Write buffer has been drained.");
+      console.debug("[SharletPQueryRcon/TCP/Socket] Write buffer has been drained.");
     });
     
     this._socket.on("end", () => {
-      console.warn("The connected address has closed the session.");
+      console.warn("[SharletPQueryRcon/TCP/Socket] The connected address has closed the session.");
     });
     
     this._socket.on("error", (error) => {
-      console.error(error);
+      console.error(`[SharletPQueryRcon/TCP/Socket] ${error}`);
     });
     
     this._socket.on("ready", () => {
-      console.info("Socket is ready to be used.");
+      console.info("[SharletPQueryRcon/TCP/Socket] Socket is ready to be used.");
     });
     
     this._socket.on("timeout", () => {
-      console.warn("Socket has timedout.");
+      console.warn("[SharletPQueryRcon/TCP/Socket] Socket has timedout.");
     });
   }
   
