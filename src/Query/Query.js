@@ -50,7 +50,7 @@ class Query {
     const BasicRequestPacket = require("./Packet/packets/BasicRequestPacket.js");
     this._packets.set("BasicRequestPacket", new BasicRequestPacket());
     
-    const BasicResponsePacket = require("./&$Packet/packets/BasicResponsePacket.js");
+    const BasicResponsePacket = require("./Packet/packets/BasicResponsePacket.js");
     this._packets.set("BasicResponsePacket", new BasicResponsePacket());
     
     const FullRequestPacket = require("./Packet/packets/FullRequestPacket.js");
