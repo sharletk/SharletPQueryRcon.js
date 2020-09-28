@@ -22,6 +22,8 @@
 const Socket = require("../Socket/TCP/Socket.js");
 const BinaryStream = require("../BinaryStream/BinaryStream.js");
 
+const EventEmitter = require("events");
+
 class Rcon {
   constructor() {
     this._socket;
@@ -31,12 +33,12 @@ class Rcon {
     this._loggedIn = false;
     
     this._data = null;
-    this._recieved = false;
-    
-    this._init();
+    this._recieved = false;        
     
     this.__password;
     this._command;
+    
+    this._emitter = new EventEmitter();
   }
   
   /**
@@ -79,9 +81,19 @@ class Rcon {
    * @param {string} address
    */
   
-  async connect(port, address) {
-    await this._socket.connect(port, address);
-    this._connected = true;
+  async connect(port, address) {    
+    return new Promise(async (resolve, reject) => { // eslint-disable-line no-async-promise-executor
+      try {
+        await this._init();
+        await this._socket.connect(port, address).then((sock) => {
+          this._connected = true;      
+          
+          setTimeout(() => resolve(this), 1000);    
+        }).catch(error => reject(error));
+      } catch (error) {
+        reject(error);
+      }
+    });
   }
   
   /**
@@ -145,6 +157,16 @@ class Rcon {
   }
   
   /**
+   * Get the Event Emitter.
+   *
+   * @return {*}
+   */
+   
+  getEmitter() {
+    return this._emitter;
+  }
+  
+  /**
    * Execute the command
    *
    */
@@ -199,7 +221,9 @@ class Rcon {
       
       this._data = await CommandResponsePacket.getPayload();
       
+      await this._emitter.emit("data", this._data);
       await this.disconnect();
+      this._recieved = true;
     } else {
       return;
     }

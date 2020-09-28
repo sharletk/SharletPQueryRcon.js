@@ -144,7 +144,7 @@ class Query {
    * @param {string} statType
    */
     
-  async query(statType = "full") {    
+  async execute(statType = "full") {    
     if (!(this._connected)) return console.error("[SharletPQueryRcon/Query] Please connect to a address.");
     
     await this._initializePackets();        
