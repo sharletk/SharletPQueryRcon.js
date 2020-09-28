@@ -22,6 +22,8 @@
 const Socket = require("../Socket/UDP/Socket.js");
 const BinaryStream = require("../BinaryStream/BinaryStream.js");
 
+const EventEmitter = require("events");
+
 class Query {
   constructor() {
     this._socket;
@@ -32,7 +34,7 @@ class Query {
     this._data = null;
     this._recieved = false;
     
-    this._init();
+    this._emitter = new EventEmitter();     
   }
   
   /**
@@ -69,7 +71,7 @@ class Query {
     this._socket = await (new Socket());
     await this._socket.createSocket();
     
-    await this._socket.getSocket().on("message", (message, rinfo) => {
+    this._socket.getSocket().on("message", (message, rinfo) => {
       this._dataParser(message, rinfo);
     });
   }
@@ -82,8 +84,19 @@ class Query {
    */
   
   async connect(port, address) {
-    await this._socket.connect(port, address);
-    this._connected = true;
+    return new Promise(async (resolve, reject) => {
+      try {
+        await this._init();
+        console.log(this)
+        await this._socket.connect(port, address).then((sock) => {
+          this._connected = true;      
+          
+          setTimeout(() => resolve(this), 1000);    
+        }).catch(error => reject(error));
+      } catch (error) {
+        reject(error);
+      }
+    });
   }
   
   /**
@@ -113,7 +126,7 @@ class Query {
    */
   
   getData() {
-    return this._data;
+    return this._emitter.on("data", (data) => data);
   }
   
   /**
@@ -135,7 +148,10 @@ class Query {
     
     await HandshakeRequestPacket.setSessionID(HandshakeRequestPacket._generateSessionID());
     await HandshakeRequestPacket.encode();
-    await this._socket.sendData(HandshakeRequestPacket.getBuffer());
+    console.log(HandshakeRequestPacket)
+    await this._socket.sendData(HandshakeRequestPacket.getBuffer()); 
+    
+    return this;     
   }
   
   /**
@@ -197,6 +213,9 @@ class Query {
       }
       
       await this.disconnect();
+      this._recieved = true;
+      console.log(this._data);
+      this._emitter.emit("data", this._data);
     } else if (type == 0x09) {
       let HandshakeResponsePacket = this._packets.get("HandshakeResponsePacket");
       

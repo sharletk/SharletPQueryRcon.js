@@ -99,8 +99,8 @@ class Socket {
    * @param {string} address
    */
   
-  async connect(port, address) {    
-    await this._socket.connect(port, address);
+  async connect(port, address) {
+    await this._socket.connect(port, address); 
   }
   
   /**
