@@ -6,7 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" ",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
+    "lint:fix": "eslint . --fix",
+    "query": "node ./examples/query/index.js",
+    "rcon": "node ./examples/rcon/index.js"
   },
   "devDependencies": {
     "eslint": "^7.9.0"

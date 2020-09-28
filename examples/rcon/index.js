@@ -1,4 +1,4 @@
-const { Rcon } = require("../src/index.js");
+const { Rcon } = require("../../src/index.js");
 const rcon = new Rcon();
 
 rcon.setPassword("sharletp");
