@@ -84,10 +84,9 @@ class Query {
    */
   
   async connect(port, address) {
-    return new Promise(async (resolve, reject) => {
+    return new Promise(async (resolve, reject) => { // eslint-disable-line no-async-promise-executor
       try {
         await this._init();
-        console.log(this)
         await this._socket.connect(port, address).then((sock) => {
           this._connected = true;      
           
@@ -126,7 +125,17 @@ class Query {
    */
   
   getData() {
-    return this._emitter.on("data", (data) => data);
+    return this._data;
+  }
+  
+  /**
+   * Get the Event Emitter.
+   *
+   * @return {*}
+   */
+   
+  getEmitter() {
+    return this._emitter;
   }
   
   /**
@@ -148,10 +157,7 @@ class Query {
     
     await HandshakeRequestPacket.setSessionID(HandshakeRequestPacket._generateSessionID());
     await HandshakeRequestPacket.encode();
-    console.log(HandshakeRequestPacket)
-    await this._socket.sendData(HandshakeRequestPacket.getBuffer()); 
-    
-    return this;     
+    await this._socket.sendData(HandshakeRequestPacket.getBuffer());   
   }
   
   /**
@@ -212,10 +218,9 @@ class Query {
         return;
       }
       
+      await this._emitter.emit("data", this._data);
       await this.disconnect();
       this._recieved = true;
-      console.log(this._data);
-      this._emitter.emit("data", this._data);
     } else if (type == 0x09) {
       let HandshakeResponsePacket = this._packets.get("HandshakeResponsePacket");
       
