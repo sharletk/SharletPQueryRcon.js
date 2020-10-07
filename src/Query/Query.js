@@ -206,12 +206,12 @@ class Query {
           "game_type": payload[3],
           "game_id": payload[5],
           "version": payload[7],
-          "plugins": payload[9],
-          "map": payload[11],
-          "numplayers": payload[13],
-          "maxplayers": payload[15],
-          "hostport": payload[17],
-          "hostip": payload[19],
+          "server_engine": payload[9],
+          "plugins": payload[11],
+          "map": payload[13],
+          "numplayers": payload[15],
+          "maxplayers": payload[17],
+          "whitelist": payload[19],
           "players": payload[20]
         };
       } else {
