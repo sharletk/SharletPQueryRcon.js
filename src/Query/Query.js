@@ -201,19 +201,16 @@ class Query {
         
         let payload = await FullResponsePacket.getPayload();
         
-        this._data = {
-          "hostname": payload[1],
-          "game_type": payload[3],
-          "game_id": payload[5],
-          "version": payload[7],
-          "server_engine": payload[9],
-          "plugins": payload[11],
-          "map": payload[13],
-          "numplayers": payload[15],
-          "maxplayers": payload[17],
-          "whitelist": payload[19],
-          "players": payload[20]
-        };
+        this._data = {};
+        payload.forEach((v, i) => {
+          if (i % 2 !== 0) return;
+                 
+          this._data[v] = payload[++i];
+        });
+        
+        if (typeof this._data[""] == "string") {
+          delete this._data[""];
+        }
       } else {
         return;
       }
