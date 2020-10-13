@@ -33,23 +33,30 @@ class FullResponsePacket extends ServerClientPacket {
    *
    */
   
-  _decodePayload() {            
-    this.read(11); // Decode the splitnum padding
+  _decodePayload() {                
+    this.read(11); // Decode the splitnum       
     
-    for (let i = 1; i <= 20; i++) {                        
+    for (let i = 1; i <= 24; i++) {
       this._payload.push(this.readString().replace("\x00", ""));
-    }
+    }       
     
-    this.read(12); // Decode the extra paddings.
+    this.read(11); // Decode the extra unwated player padding.      
     
     let players = [];
+    let numplayers = 0;
+    
+    if (this._payload.includes("numplayers")) {
+      let index = this._payload.indexOf("numplayers") + 1;
+      numplayers = Number(this._payload[index]);
+    }
+    
     if (!(this.feof())) {
-      for (let i = 1; i <= Number(this._payload[13]); i++) {
+      for (let i = 1; i <= numplayers; i++) {
         players.push(this.readString().replace("\x00", ""));
       }
     }
     
-    this._payload.push(players);
+    this._payload.push("players", players);
   }
 }
 
