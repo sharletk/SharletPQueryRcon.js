@@ -1,6 +1,6 @@
 {
   "name": "sharletpqueryrcon",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A Query and Rcon Client for Minecraft Bedrock Servers in Node.js",
   "main": "./src/index.js",
   "scripts": {
